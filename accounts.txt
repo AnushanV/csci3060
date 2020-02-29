@@ -1,0 +1,4 @@
+admin AA 100 password
+fs FS 100 password
+bs BS 100 password
+ss SS 100 password
