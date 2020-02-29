@@ -5,6 +5,35 @@
 //#include <iostream>
 #include <string.h>
 const char* accountFile = "accounts.txt";
+const char* tempFile = "temp.txt";
+
+// Copies information from temporary file to the main file
+void updateFile(std::string fileToUpdate, std::string temporaryFile){
+	std::ifstream iFile;
+	std::ofstream oFile;
+	
+	// open input file
+	iFile.open(temporaryFile);
+	if(iFile.is_open()){
+		
+		oFile.open(fileToUpdate);
+		if(oFile.is_open()){
+			std::string line;
+			
+			while(std::getline(iFile, line)){
+				oFile << line << "\n";
+			}
+			
+			oFile.close();
+		} else {
+			printf("ERROR: Input file not opened\n");
+		}
+		
+		iFile.close();
+	} else {
+		printf("ERROR: Input file not opened\n");
+	}
+}
 
 struct User{
 	std::string username_;
@@ -95,8 +124,11 @@ struct User{
 		*/
 	}
 	
+	virtual ~User() = default;
+	
 	void addCredit(float amount){
 		credit_ += amount;
+		printf("Amount Added\nUser Balance Readjusted\n");
 	}
 	
 	
@@ -156,12 +188,14 @@ struct User{
 		}
 	}
 	
+	void createUser(std::string username, std::string type, double credit, std::string password){ printf("ERROR: No permission to use createUser");}
+	
 };
 
 struct FullStandard : User{
 	
 	FullStandard(std::string username, std::string password, double credit)
-	: User(username, password, "Full-Standard", credit)
+	: User(username, password, "full-standard", credit)
 	{
 		// intentionally left blank
 	}
@@ -209,7 +243,7 @@ struct FullStandard : User{
 struct BuyStandard : User{
 	
 	BuyStandard(std::string username, std::string password, double credit)
-	: User(username, password, "Buy-Standard", credit)
+	: User(username, password, "buy-standard", credit)
 	{
 		// intentionally left blank
 	}
@@ -237,7 +271,7 @@ struct BuyStandard : User{
 struct SellStandard : User{
 	
 	SellStandard(std::string username, std::string password, double credit)
-	: User(username, password, "Sell-Standard", credit)
+	: User(username, password, "sell-standard", credit)
 	{
 		// intentionally left blank
 	}
@@ -265,14 +299,14 @@ struct SellStandard : User{
 struct Admin : User{
 	
 	Admin(std::string username, std::string password, double credit)
-	: User(username, password, "Admin", credit)
+	: User(username, password, "admin", credit)
 	{
 		// intentionally left blank
 	}
 	
 	void deleteUser(std::string userToDelete){
-		std::cout << "bruh\n";
 		// remove the user on account file
+		
 		// open files
 		std::ifstream iAccFile;
 		std::ofstream oAccFile;
@@ -302,7 +336,7 @@ struct Admin : User{
 				
 				// 
 				if(info[0] == userToDelete){
-					printf("Account Found");
+					printf("User deleted\n");
 					accountFound = true;
 				} else {
 					// idk how c++ file i/o works so im assuming it just writes over each line I read with the same thing
@@ -363,17 +397,81 @@ struct Admin : User{
 	}
 	
 	void createUser(std::string username, std::string type, double credit, std::string password){
-		/*if(type == "Admin"){
-			Admin(username, password, 0.0);
-		} else if (type == "Buy-Standard"){
-			BuyStandard(username, password, 0.0);
-		} else if (type == "Sell-Standard"){
-			SellStandard(username, password, 0.0);
-		} else if (type == "Full-Standard"){
-			FullStandard(username, password, 0.0);
+		std::ifstream iAccFile;
+		std::ofstream oTempFile;
+		
+		iAccFile.open(accountFile);
+		
+		if(iAccFile.is_open()){
+			std::string line;
+			bool isUsernameTaken = false;
+			
+			// Checks to see if username is taken
+			while(std::getline(iAccFile, line)){
+				std::string info[4];
+				int infoIndex = 0;
+				
+				char *linechar = new char[line.length() + 1];
+				strcpy(linechar, line.c_str());
+				
+				char* tokens = strtok(linechar, " ");
+				
+				// store each account information
+				while(tokens != NULL){
+					info[infoIndex++] = tokens;
+					tokens = strtok(NULL, " ");
+				}
+				
+				if(info[0] == username){
+					isUsernameTaken = true;
+				}
+			}
+			iAccFile.close();
+			// if username isnt taken, then add it to account file
+			if(!isUsernameTaken){
+				iAccFile.open(accountFile);
+				if(iAccFile.is_open()){
+					
+					oTempFile.open(tempFile);
+					if(oTempFile.is_open()){
+						// copying original account info
+						while(std::getline(iAccFile, line)){
+							oTempFile << line << "\n";
+						}
+						
+						if(type == "admin"){
+							oTempFile << username << " AA " << credit << " " << password << "\n";
+							oTempFile.close();
+							updateFile(accountFile, tempFile);
+							printf("Account Successfully Created\n");
+						} else if(type == "full-standard"){
+							oTempFile << username << " FS " << credit << " " << password << "\n";
+							oTempFile.close();
+							updateFile(accountFile, tempFile);
+							printf("Account Successfully Created\n");
+						} else if(type == "buy-standard"){
+							oTempFile << username << " BS " << credit << " " << password << "\n";
+							oTempFile.close();
+							updateFile(accountFile, tempFile);
+							printf("Account Successfully Created\n");
+						} else if(type == "sell-standard"){
+							oTempFile << username << " SS " << credit << " " << password << "\n";
+							oTempFile.close();
+							updateFile(accountFile, tempFile);
+							printf("Account Successfully Created\n");
+						} else {
+							printf("ERROR: Account type must be admin, buy-standard, or sell-standard\n");
+						}
+					} else {
+						printf("ERROR: Temp file not opened \n");
+					}
+				}
+			} else {
+				printf("ERROR: Username already taken");
+			}
 		} else {
-			printf("incorrect type");
-		}*/
+			printf("ERROR: Account file not opened\n");
+		}
 	}
 	
 	void refund(std::string seller, std::string buyer, float amount){

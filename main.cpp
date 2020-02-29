@@ -26,6 +26,10 @@ int main(){
 		string input; //user's input
 		cin >> input;
 		
+		if(input == "exit"){
+			exit(0);
+		}
+		
 		if(input == "login"){
 			
 			if (isLoggedIn){
@@ -34,7 +38,6 @@ int main(){
 			else{
 				//check if account exists
 				std::ifstream iAccFile;
-				
 				iAccFile.open(accountFile);
 				
 				if(iAccFile.is_open()){
@@ -45,10 +48,12 @@ int main(){
 					cout << "Enter password:\n";
 					cin >> password;
 				
-					std:: string line = "";
+					string line = "";
 					bool accountFound = false;
 					// read each line of account file
-					while(std::getline(iAccFile, line)){
+					while(getline(iAccFile, line)){
+						cout << line << "\n";
+						
 						std::string info[4];
 						int infoIndex = 0;
 						
@@ -59,9 +64,12 @@ int main(){
 						
 						// store each account information
 						while(tokens != NULL){
+							//cout << info[infoIndex] + "\n";
 							info[infoIndex++] = tokens;
 							tokens = strtok(NULL, " \n\r");
 						}
+						
+						cout << "passed\n";
 						
 						//cout << username + " " + password + "\n";
 						//cout <<info[0] + " " + info[3] + "\n";
@@ -106,39 +114,51 @@ int main(){
 				//Call bid function
 			}
 			else if(input == "create"){
-				if(current->accountType_ == "Admin"){
-				//Calls create function
-				cout << "Enter username for new user:\n";
-				string newUsername;
-				cin >> newUsername;
+				if(current->accountType_ == "admin"){
+					//Calls create function
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					cout << "Enter username for new user:\n";
+					string newUsername;
+					cin >> newUsername;
 				
-				cout << "Enter password for new user:\n";
-				string newPassword;
-				cin >> newPassword;
+					cout << "Enter password for new user:\n";
+					string newPassword;
+					cin >> newPassword;
+					
+					cout << "Enter account type for new user:\n";
+					string newType;
+					cin >> newType;
 				
-				cout << "Enter credit for new user:\n";
-				double newCredit;
-				cin >> newCredit;
-				// somehow create new user
+					cout << "Enter credit for new user:\n";
+					double newCredit;
+					cin >> newCredit;
+					
+					// somehow create new user
+					adminAccount->createUser(newUsername, newType, newCredit, newPassword);
 				} else {
 					cout << "ERROR: Cannot create user with a non-admin account\n";
 				}
 			}
 			else if(input == "logout"){
 				//Calls logout function
-				delete current;
+				//delete current;
+				current = NULL;
 				isLoggedIn = false;
 				cout << "successfully logged out\n";
 				// need to create daily transaction file
 			}
 			else if(input == "addcredit"){
 				//Calls addcredit function
+				cout << "Enter Amount:\n";
+				double amountToAdd;
+				cin >> amountToAdd;
+				current->addCredit(amountToAdd);
 			}
 			else if(input == "advertise"){
 				//Calls advertise function
 			}
 			else if(input == "delete"){
-				if (current->accountType_ == "Admin"){
+				if (current->accountType_ == "admin"){
 					cout << "Enter user to be deleted:\n";
 					string userToDelete;
 					cin >> userToDelete;
@@ -151,14 +171,11 @@ int main(){
 			else if(input == "refund"){
 				//Calls refund function
 			}
-			else {
+			else if(input != "login"){
 				cout << "ERROR: Not a command\n";
 			}
 		}
 		else{
-			if(input == "exit"){
-				exit(0);
-			}
 			if (input != "login"){
 				cout << "ERROR: User is not logged in\n";
 			}
