@@ -1,0 +1,8 @@
+Please login to the system
+Enter username:
+Enter password:
+Login successful
+Enter username for new user:
+ERROR: Username must be less than or equal to 15 characters
+Logout Successful
+Transactions Listed
