@@ -340,7 +340,7 @@ struct Admin : User{
 			std::cout << "ERROR: Username must be less than or equal to 15 characters\n";
 			return;
 		}
-		if (credit <= 999999 && credit >= 0){
+		if (credit > 999999 || credit < 0){
 			std::cout << "ERROR: Credit must be between 0 and 999,999\n";
 			return;
 		}
