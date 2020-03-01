@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 admin AA 19 password
 fs FS 12 password
-ss SS 25 password
-bs BS 5 password
-=======
-admin AA 141 password
-fs FS 22.86 password
-ss SS 10 password
+ss SS 20 password
 bs BS 10 password
->>>>>>> 4a8c7ec95e7ecab5f00606d4ebf5e68cc544a213
