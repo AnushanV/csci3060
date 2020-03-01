@@ -229,35 +229,26 @@ int main(){
 					while(sMinBid.length()<7) sMinBid = 0 + sMinBid;
 					while(seller.length() < 16) seller = seller + " ";
 					while(currentHighestBid.length() < 16) currentHighestBid = currentHighestBid + " ";
-
-
-
-
 					//Recording to file
 					//Open file stream in append mode
 					ofstream adAppend;
 					adAppend.open("items.txt", ofstream::out | ofstream::app);
 					if (adAppend.is_open()){
-						adAppend >> adItem;
-						adAppend >> " ";
-						adAppend >> seller;
-						adAppend >> " ";
-						adAppend >> currentHighestBid;
-						adAppend >> " ";
-						adAppend >> sDuration;
-						adAppend >> " ";
-						adAppend >> sMinBid;
+						adAppend << adItem;
+						adAppend << " ";
+						adAppend << seller;
+						adAppend << " ";
+						adAppend << currentHighestBid;
+						adAppend << " ";
+						adAppend << sDuration;
+						adAppend << " ";
+						adAppend << sMinBid;
 					}
 					else{
 						cout << "ERROR: Cannot output ad to file\n";
 					}
-
-
-
-
-
- 
-				}
+					adAppend.close();
+		        }
 				else if (hasAdvertised){
 					cout << "ERROR: Cannot advertise more than once per session\n";
 
