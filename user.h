@@ -128,9 +128,7 @@ struct FullStandard : User{
 				if(newBid <= currentBid * 1.05){
 					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
 					return;
-				} else {
-					printf("Correct bid\n");
-				} 
+				}
 		
 				iItemFile.open(itemFile);
 
@@ -258,8 +256,6 @@ struct BuyStandard : User{
 				if(newBid <= currentBid * 1.05){
 					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
 					return;
-				} else {
-					printf("Correct bid\n");
 				} 
 		
 				iItemFile.open(itemFile);
@@ -452,9 +448,7 @@ struct Admin : User{
 				if(newBid <= currentBid){
 					printf("ERROR: new bid must be greater than highest current bid\n");
 					return;
-				} else {
-					printf("Correct bid\n");
-				} 
+				}
 		
 				iItemFile.open(itemFile);
 
