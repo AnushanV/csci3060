@@ -19,7 +19,9 @@ int main(){
 	bool isLoggedIn = false;
 	//Calls login class
 	User * current;
-
+	string transactions = "";
+	const char* dtf = "dailyTransactions.dt";
+	
 	while(1){
 		//We would also have a check here to see if the user is null to make sure a user with permissions is logged in
 		//If not we would call the login function
@@ -130,8 +132,12 @@ int main(){
 					double newCredit;
 					cin >> newCredit;
 					
-					// somehow create new user
+					//create new user
 					adminAccount->createUser(newUsername, newType, newCredit, newPassword);
+					
+					//add transaction
+					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+					
 				} else {
 					cout << "ERROR: Cannot create user with a non-admin account\n";
 				}
@@ -139,10 +145,25 @@ int main(){
 			else if(input == "logout"){
 				//Calls logout function
 				//delete current;
+				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+				
 				current = NULL;
 				isLoggedIn = false;
 				cout << "Logout Successful\n";
-				// need to create daily transaction file
+				
+				//output daily transactions
+				ofstream oDTF;
+				oDTF.open(dtf);
+				
+				if (oDTF.is_open()){
+					oDTF << transactions;
+				}
+				else{
+					cout << "ERROR: Cannot list transactions\n";
+				}
+				
+				oDTF.close();
+				
 				cout << "Transactions Listed\n";
 			}
 			else if(input == "addcredit"){
@@ -168,16 +189,23 @@ int main(){
 					
 					adminAccount->addCredit(amountToAdd, userToAdd);
 				}
+				
+				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
 			}
 			else if(input == "advertise"){
 				//Calls advertise function
 			}
 			else if(input == "delete"){
 				if (current->accountType_ == "admin"){
+					
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					
 					cout << "Enter user to be deleted:\n";
 					string userToDelete;
 					cin >> userToDelete;
-					current->deleteUser(userToDelete);
+					adminAccount->deleteUser(userToDelete);
+					
+					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
 				}
 				else{
 					cout << "ERROR: Cannot delete user with a non-admin account\n";

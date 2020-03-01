@@ -60,63 +60,23 @@ struct User{
 	
 	virtual ~User() = default;
 	
-	void deleteUser(std::string userToDelete){
-		
-		// remove the user on account file
-		// open files
-		std::ifstream iAccFile;
-		std::ofstream oAccFile;
-		
-		iAccFile.open(accountFile);
-		
-		if(iAccFile.is_open()){
-			std:: string line;
-			std:: string accounts = "";
-			bool accountFound = false;
-			// read each line of account file
-			while(std::getline(iAccFile, line)){
-				
-				std::string info[4];
-				int infoIndex = 0;
-				
-				char *linechar = new char[line.length() + 1];
-				strcpy(linechar, line.c_str());
-				
-				char* tokens = strtok(linechar, " ");
-				
-				// store each account information
-				while(tokens != NULL){
-					info[infoIndex++] = tokens;
-					tokens = strtok(NULL, " ");
-				}
-				
-				// 
-				if(info[0] == userToDelete){
-					printf("Account Found");
-					accountFound = true;
-				} else {
-					// idk how c++ file i/o works so im assuming it just writes over each line I read with the same thing
-					// NOTE: if this duplicates the account info, then delete this
-					accounts += line;
-					accounts += "\n";
-				}
-			}
-			if(accountFound){
-				// removes the last account that should already be stored, lowering account count to 1
-				//oAccFile << "\n";
-			}
-			oAccFile.open(accountFile);
-			oAccFile << accounts;
-			// close files
-			oAccFile.close();
-			iAccFile.close();
-			
-		} else {
-			printf("cannot find file");
-		}
-	}
-	
 	void createUser(std::string username, std::string type, double credit, std::string password){ printf("ERROR: No permission to use createUser");}
+	
+	std::string getType(){
+		if (accountType_ == "admin"){
+			return "AA";
+		}
+		else if (accountType_ == "buy-standard"){
+			return "BS";
+		}
+		else if (accountType_ == "sell-standard"){
+			return "SS";
+		}
+		else if (accountType_ == "full-standard"){
+			return "FS";
+		}
+		return "_";
+	}
 	
 };
 
@@ -233,23 +193,17 @@ struct Admin : User{
 	}
 	
 	void deleteUser(std::string userToDelete){
+		
 		// remove the user on account file
-		
-		//check if input is valid
-		if (userToDelete == username_){
-			std::cout << "ERROR: Cannot delete the current user\n";
-			return;
-		}
-		
 		// open files
 		std::ifstream iAccFile;
 		std::ofstream oAccFile;
 		
 		iAccFile.open(accountFile);
-		oAccFile.open(accountFile);
 		
 		if(iAccFile.is_open()){
 			std:: string line;
+			std:: string accounts = "";
 			bool accountFound = false;
 			// read each line of account file
 			while(std::getline(iAccFile, line)){
@@ -275,17 +229,16 @@ struct Admin : User{
 				} else {
 					// idk how c++ file i/o works so im assuming it just writes over each line I read with the same thing
 					// NOTE: if this duplicates the account info, then delete this
-					oAccFile << line << "\n";
+					accounts += line;
+					accounts += "\n";
 				}
 			}
 			if(accountFound){
 				// removes the last account that should already be stored, lowering account count to 1
-				oAccFile << "\n";
+				//oAccFile << "\n";
 			}
-			else{
-				std::cout << "ERROR: That user does not exist\n";
-			}
-			
+			oAccFile.open(accountFile);
+			oAccFile << accounts;
 			// close files
 			oAccFile.close();
 			iAccFile.close();
