@@ -1,9 +1,10 @@
 Please login to the system
 Enter username:
 Enter password:
-ERROR: Entered username and password combination does not exist
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
+Login Successful
+Enter username for new user:
+Enter password for new user:
+Enter account type for new user:
+Enter credit for new user:
+ERROR: Username already takenLogout Successful
+Transactions Listed

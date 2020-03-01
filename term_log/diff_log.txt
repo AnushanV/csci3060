@@ -1,0 +1,553 @@
+TEST addcreditTests/addcreditAddLessThanMin:
+4c4
+< Login successful
+---
+> Login Successful
+6c6,7
+< ERROR: amount entered is not greater than 0
+---
+> Amount Added
+> User Balance Readjusted
+
+
+TEST addcreditTests/addcreditAddMoreThanMax:
+6c6,7
+< ERROR: amount entered is greater than the maximum allowed
+---
+> Amount Added
+> User Balance Readjusted
+
+
+TEST addcreditTests/addcreditUserExists:
+4,9c4,8
+< Login Successful
+< Enter Amount:
+< Enter user to add credit to:
+< ERROR: that user does not exist
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseAdLimit:
+4,11c4,11
+< Login successful
+< Enter item name:
+< Enter minimum bid:
+< Enter auction duration:
+< Item Successfully Advertised
+< ERROR: Cannot advertise more than once per session
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseBidCap:
+4,9c4,8
+< Login successful
+< Enter item name:
+< Enter minimum bid:
+< ERROR: item price cannot exceed 999.99
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseBuyAccount:
+4,7c4,6
+< Login successful
+< ERROR: buy-standard account type cannot advertise
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseCharLimit:
+4,8c4,30
+< Login successful
+< Enter item name:
+< ERROR: item name cannot exceed 25 characters
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseDurationCap:
+4,10c4,10
+< Login successful
+< Enter item name:
+< Enter minimum bid:
+< Enter auction duration:
+< ERROR: auction cannot exceed 100 days
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseNotLoggedIn:
+2c2
+< ERROR: User is not logged in
+\ No newline at end of file
+---
+> ERROR: User is not logged in
+
+
+TEST advertiseTests/advertiseSuccessful:
+4,10c4,10
+< Login successful
+< Enter item name:
+< Enter minimum bid:
+< Enter auction duration:
+< Item Listed Successfully
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidGreaterThanCurrent:
+4,10c4,9
+< Login successful
+< Enter item name:
+< Enter seller's username:
+< Current bid: 1.00
+< ERROR: new bid must be greater than highest current bid
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidItemDoesNotExist:
+4,9c4,9
+< Login successful
+< Enter item name:
+< Enter seller's username:
+< ERROR: Item does not exist
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidMinAmountIncrease:
+4,11c4,9
+< Login successful
+< Enter item name:
+< Enter seller's username:
+< Current bid: 1.50
+< ERROR: new bid must be at least 5% greater than the current highest bid for standard-buy accounts
+< Logout Successful
+< Transactions Listed
+< 
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidNotLoggedIn:
+2c2
+< ERROR: User is not logged in
+\ No newline at end of file
+---
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidSellAccount:
+4,7c4,6
+< Login successful
+< ERROR: standard sell accounts cannot bid
+< Logout Successful
+< Transactions Listed
+\ No newline at end of file
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidSellerDoesNotExist:
+4,9c4,8
+< Login successful
+< Enter item name:
+< Enter seller's username:
+< ERROR: Seller does not exist
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST bidTests/bidSuccessful:
+2,9c2,10
+< Enter item name:
+< Enter seller's username:
+< Current bid: 350.00
+< Bid placed
+< Logout Successful
+< Transactions Listed
+< Logout Successful
+< Transactions Listed
+---
+> Enter username:
+> Enter password:
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createAccountType:
+4,10c4,10
+< Login successful
+< Enter username for new user:
+< Enter password for new user:
+< Enter account type for new user:
+< ERROR: Account type must be admin, buy-standard, or sell-standard
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createCreditLimit:
+4,11c4,10
+< Login successful
+< Enter username for new user:
+< Enter password for new user:
+< Enter account type for new user:
+< Enter credit for new user:
+< ERROR: Credit must be between 0 and 999,999
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createNotAdmin:
+4,7c4,6
+< Login successful
+< ERROR: Cannot create user with a non-admin account
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createSuccess:
+4,10c4,10
+< Login successful
+< Enter username for new user:
+< Enter password for new user:
+< Enter account type for new user:
+< Account creation successful
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createUniqueUsername:
+4,8c4,10
+< Login successful
+< Enter username for new user:
+< ERROR: That username already exists
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST createTests/createUsernameLength:
+4,8c4,10
+< Login successful
+< Enter username for new user:
+< ERROR: Username must be less than or equal to 15 characters
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST deleteTests/deleteNotAdmin:
+4,7c4,6
+< Login successful
+< ERROR: Cannot delete user with a non-admin account
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST deleteTests/deleteNotCurrent:
+4,8c4,7
+< Login successful
+< Enter user to be deleted:
+< ERROR: Cannot delete the current user
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST deleteTests/deleteSuccess:
+2,8d1
+< Enter username:
+< Enter password:
+< Login successful
+< Enter user to be deleted:
+< User deleted
+< Logout Successful
+< Transactions Listed
+
+
+TEST deleteTests/deleteUserExists:
+4,8c4,7
+< Login successful
+< Enter user to be deleted:
+< ERROR: That user does not exist
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST loginTests/loginNoItemsFile:
+5d4
+< ERROR: Cannot find items
+
+
+TEST logoutTests/logoutListTransaction:
+4c4
+< Login Successful:
+---
+> Login Successful
+6c6
+< ERROR: Cannot list transactions
+---
+> Transactions Listed
+
+
+TEST refundTests/refundBuyerCreditLimit:
+4,10c4,9
+< Login successful
+< Enter buyer:
+< Enter seller:
+< Enter Amount of Credit:
+< ERROR: Buyer will exceed maximum credit
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST refundTests/refundBuyerExists:
+4,8c4,7
+< Login successful
+< Enter buyer:
+< ERROR: Customer is not a current user
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST refundTests/refundNotAdmin:
+4,6c4,6
+< ERROR: Must be an admin to refund
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST refundTests/refundSellerCreditLimit:
+4,10c4,9
+< Login successful
+< Enter buyer:
+< Enter seller:
+< Enter Amount of Credit:
+< ERROR: Seller does not have enough credit
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST refundTests/refundSellerExists:
+4,9c4,8
+< Login successful
+< Enter buyer:
+< Enter seller:
+< ERROR: Seller is not a current user
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+
+TEST refundTests/refundSuccess:
+4,10c4,9
+< Login successful
+< Enter buyer:
+< Enter seller:
+< Enter Amount of Credit:
+< Refund Successful
+< Logout Successful
+< Transactions Listed
+---
+> ERROR: Entered username and password combination does not exist
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+> ERROR: User is not logged in
+
+

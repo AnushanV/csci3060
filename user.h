@@ -34,6 +34,11 @@ void updateFile(std::string fileToUpdate, std::string temporaryFile){
 		printf("ERROR: Input file not opened\n");
 	}
 }
+float round2Places(float var) 
+{ 
+    float value = (int)(var * 100 + .5); 
+    return (float)value / 100; 
+} 
 
 struct User{
 	std::string username_;
@@ -51,86 +56,9 @@ struct User{
 		password_ = password;
 		accountType_ = accountType;
 		credit_ = credit;
-		
-		//This whole part basically opens the accounts file, reads each line to see 
-		//If the username is taken, and then write the new account information to the
-		// end of the file if it isnt
-		
-		/*
-		// write into accounts file
-		std::ifstream iAccFile;
-		std::ofstream oAccFile;
-		
-		// open files
-		iAccFile.open(accountFile);
-		oAccFile.open(accountFile);
-		
-		if(iAccFile.is_open()){
-			std::string line;
-			bool isThatUsernameTaken = false;
-			
-			// read each line of account file
-			while(getline(iAccFile, line)){
-				std::string info[3];
-				int infoIndex = 0;
-				
-				char *linechar = new char[line.length() + 1];
-				strcpy(linechar, line.c_str());
-				
-				char* tokens = strtok(linechar, " ");
-				
-				// store each account information
-				while(tokens != NULL){
-					info[infoIndex++] = tokens;
-					tokens = strtok(NULL, " ");
-				}
-				// see if username is taken
-				if(info[0] == username){
-					printf("Account already exists now do something about it");
-					isThatUsernameTaken = true;
-				}
-				
-				// idk how c++ file i/o works so im assuming it just writes over each line I read with the same thing
-				// NOTE: if this duplicates the account info, then delete this
-				oAccFile << line << "\n";
-			}
-			
-			
-			// add new user to file
-			if(!isThatUsernameTaken){
-				oAccFile << username_ << " ";
-				if(accountType_ == "Admin"){
-					oAccFile << "AA ";
-				} else if (accountType == "Buy-Standard"){
-					oAccFile << "BS ";
-				} else if(accountType == "Sell-Standard"){
-					oAccFile << "SS ";
-				} else if (accountType == "Full-Standard"){
-					oAccFile << "FS ";
-				} else {
-					oAccFile << "ER ";
-				}
-				
-				oAccFile << credit << " " << password_ << "\n";
-			}
-			
-			// close files
-			oAccFile.close();
-			iAccFile.close();
-			
-		} else {
-			printf("cannot find file");
-		}
-		*/
 	}
 	
 	virtual ~User() = default;
-	
-	void addCredit(float amount){
-		credit_ += amount;
-		printf("Amount Added\nUser Balance Readjusted\n");
-	}
-	
 	
 	void deleteUser(std::string userToDelete){
 		
@@ -307,6 +235,12 @@ struct Admin : User{
 	void deleteUser(std::string userToDelete){
 		// remove the user on account file
 		
+		//check if input is valid
+		if (userToDelete == username_){
+			std::cout << "ERROR: Cannot delete the current user\n";
+			return;
+		}
+		
 		// open files
 		std::ifstream iAccFile;
 		std::ofstream oAccFile;
@@ -347,6 +281,9 @@ struct Admin : User{
 			if(accountFound){
 				// removes the last account that should already be stored, lowering account count to 1
 				oAccFile << "\n";
+			}
+			else{
+				std::cout << "ERROR: That user does not exist\n";
 			}
 			
 			// close files
@@ -396,7 +333,18 @@ struct Admin : User{
 		Advertisement(itemName, username_, duration, minimumBid);
 	}
 	
-	void createUser(std::string username, std::string type, double credit, std::string password){
+	void createUser(std::string username, std::string type, float credit, std::string password){
+		
+		//check if input is valid
+		if (username.length() > 15){
+			std::cout << "ERROR: Username must be less than or equal to 15 characters\n";
+			return;
+		}
+		if (credit <= 999999 && credit >= 0){
+			std::cout << "ERROR: Credit must be between 0 and 999,999\n";
+			return;
+		}
+		
 		std::ifstream iAccFile;
 		std::ofstream oTempFile;
 		
@@ -523,19 +471,32 @@ struct Admin : User{
 	}
 	
 	void addCredit(float amount, std::string username){
+		
+		//check if action is valid
+		if (amount >= 1000){
+			std::cout << "ERROR: amount entered is greater than the maximum allowed\n";
+			return;
+		}
+		if (amount <= 0){
+			std::cout << "ERROR: amount entered is not greater than 0\n";
+			return;
+		}
+		
 		// open files
 		std::ifstream iAccFile;
-		std::ofstream oAccFile;
+		std::ofstream oTempFile;
 		
+		iAccFile.close();
 		iAccFile.open(accountFile);
-		oAccFile.open(accountFile);
+		oTempFile.open(tempFile);
+		bool accFound = false;
 		
 		if(iAccFile.is_open()){
 			std::string line;
 
 			// read each line of account file
 			while(getline(iAccFile, line)){
-				std::string info[3];
+				std::string info[4];
 				int infoIndex = 0;
 				
 				char *linechar = new char[line.length() + 1];
@@ -551,16 +512,25 @@ struct Admin : User{
 				
 				// if it finds the user, change their credits accordingly
 				if(info[0] == username){
-					info[2] == std::to_string(std::stof(info[2]) + amount);
-					oAccFile << info[0] << " " << info[1] << " " << info[2] << "\n";
-				} else {
-					oAccFile << line << "\n";
+					float newCredit = (std::stof(info[2]) + amount);
+					oTempFile << info[0] << " " << info[1] << " " << round2Places(newCredit) << " " << info[3] << "\n";
+					accFound = true;
+					std::cout << "Amount Added\nUser Balance Readjusted\n";
+				} 
+				else {
+					oTempFile << line << "\n";
 				}
 			}
 			
+			if (!accFound){
+				std::cout << "ERROR: that user does not exist\n";
+			}
+			
 			// close files
-			oAccFile.close();
+			oTempFile.close();
 			iAccFile.close();
+			
+			updateFile(accountFile, tempFile);
 			
 		} else {
 			printf("cannot find file");

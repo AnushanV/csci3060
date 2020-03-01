@@ -52,7 +52,6 @@ int main(){
 					bool accountFound = false;
 					// read each line of account file
 					while(getline(iAccFile, line)){
-						cout << line << "\n";
 						
 						std::string info[4];
 						int infoIndex = 0;
@@ -68,8 +67,6 @@ int main(){
 							info[infoIndex++] = tokens;
 							tokens = strtok(NULL, " \n\r");
 						}
-						
-						cout << "passed\n";
 						
 						//cout << username + " " + password + "\n";
 						//cout <<info[0] + " " + info[3] + "\n";
@@ -144,15 +141,33 @@ int main(){
 				//delete current;
 				current = NULL;
 				isLoggedIn = false;
-				cout << "successfully logged out\n";
+				cout << "Logout Successful\n";
 				// need to create daily transaction file
+				cout << "Transactions Listed\n";
 			}
 			else if(input == "addcredit"){
 				//Calls addcredit function
-				cout << "Enter Amount:\n";
-				double amountToAdd;
-				cin >> amountToAdd;
-				current->addCredit(amountToAdd);
+				if (current->accountType_ != "admin"){
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					
+					cout << "Enter Amount:\n";
+					double amountToAdd;
+					cin >> amountToAdd;
+					
+					adminAccount->addCredit(amountToAdd, current->username_);
+				}
+				else{
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					
+					cout << "Enter amount:\n";
+					float amountToAdd;
+					cin >> amountToAdd;
+					cout << "Enter user to add credit to:\n";
+					string userToAdd;
+					cin >> userToAdd;
+					
+					adminAccount->addCredit(amountToAdd, userToAdd);
+				}
 			}
 			else if(input == "advertise"){
 				//Calls advertise function
