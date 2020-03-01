@@ -211,7 +211,7 @@ int main(){
 					}
 					cout << "Enter minimum bid:\n";
 					cin >> minBid;
-					if(midBid>1000){
+					if(minBid>1000){
 						cout << "ERROR: item price cannot exceed 999.99\n";
 					}
 					cout << "Enter auction duration:\n";
@@ -220,15 +220,15 @@ int main(){
 						cout << "ERROR: auction cannot exceed 100 days\n";
 					}
 					//Correcting the formatting
-					currentHighestBid = ""; //No current highest bid though
-					sDuration = to_string(duration);
-					sMinBid = to_string(minBid);
-					while(adItem.length() < 26) adItem = adItem + " ";
-					if(duration > 9 and duration != 100) sDuration = 0 + sDuration;
-					else sDuration = 0 + 0 + sDuration;
-					while(sMinBid.length()<7) sMinBid = 0 + sMinBid;
-					while(seller.length() < 16) seller = seller + " ";
-					while(currentHighestBid.length() < 16) currentHighestBid = currentHighestBid + " ";
+					string currentHighestBid = ""; //No current highest bid though
+					string sDuration = to_string(duration);
+					string sMinBid = to_string(minBid);
+					while(adItem.length() < 25) adItem = adItem + " ";
+					if(duration > 9 and duration != 100) sDuration = "0" + sDuration;
+					else sDuration = "00" + sDuration;
+					while(sMinBid.length()<6) sMinBid = "0" + sMinBid;
+					while(seller.length() < 15) seller = seller + " ";
+					while(currentHighestBid.length() < 15) currentHighestBid = currentHighestBid + " ";
 					//Recording to file
 					//Open file stream in append mode
 					ofstream adAppend;
@@ -243,6 +243,10 @@ int main(){
 						adAppend << sDuration;
 						adAppend << " ";
 						adAppend << sMinBid;
+						
+						adAppend << "\n";
+						
+						cout << "Item Listed Successfully\n";
 					}
 					else{
 						cout << "ERROR: Cannot output ad to file\n";
@@ -254,7 +258,7 @@ int main(){
 
 				}
 				else{
-					cout << "ERROR: buy-standard account type cannot advertise\n"
+					cout << "ERROR: buy-standard account type cannot advertise\n";
 				}
 			}
 			else if(input == "delete"){
