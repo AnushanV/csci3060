@@ -197,10 +197,13 @@ int main(){
 			}
 			else if(input == "delete"){
 				if (current->accountType_ == "admin"){
+					
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					
 					cout << "Enter user to be deleted:\n";
 					string userToDelete;
 					cin >> userToDelete;
-					current->deleteUser(userToDelete);
+					adminAccount->deleteUser(userToDelete);
 					
 					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
 				}
