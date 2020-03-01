@@ -171,7 +171,7 @@ int main(){
 					adminAccount->createUser(newUsername, newType, newCredit, newPassword);
 					
 					//add transaction
-					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 					
 				} else {
 					cout << "ERROR: Cannot create user with a non-admin account\n";
@@ -180,7 +180,7 @@ int main(){
 			else if(input == "logout"){
 				//Calls logout function
 				//delete current;
-				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 				
 				current = NULL;
 				isLoggedIn = false;
@@ -225,7 +225,7 @@ int main(){
 					adminAccount->addCredit(amountToAdd, userToAdd);
 				}
 				
-				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 			}
 			else if(input == "advertise"){
 				//Calls advertise function
@@ -240,7 +240,7 @@ int main(){
 					cin >> userToDelete;
 					adminAccount->deleteUser(userToDelete);
 					
-					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 				}
 				else{
 					cout << "ERROR: Cannot delete user with a non-admin account\n";
@@ -260,6 +260,8 @@ int main(){
 					cout << "Enter Amount of Credit:\n";
 					double credit;
 					cin >> credit;
+					
+					transactions += "05 " + buyer + " " + seller + " " + to_string((int)credit) + "\n";
 					
 					adminAccount->refund(seller, buyer, credit);
 				} else {
