@@ -290,7 +290,16 @@ struct Admin : User{
 							info[4] = line.substr(52, 6);
 							
 							if(info[0].substr(0, itemName.length()) == itemName && info[1].substr(0, seller.length()) == seller){
-								oTempFile << info[0] << " " << info[1] << " " << username_ << " " << info[3] << " " << bidAmount << "\n";
+								oTempFile << info[0] << " " << info[1] << " " << username_;
+								for(int i = 0; i < 15 - username_.length(); i++){
+									oTempFile << " ";
+								}
+								
+								oTempFile << " " << info[3] << " " << bidAmount;
+								for(int i = 0; i < 6 - to_string(bidAmount).length(); i++){
+									oTempFile << " ";
+								}
+								oTempFile << "\n";
 							} else {
 								oTempFile << line << "\n";
 							}
