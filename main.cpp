@@ -110,7 +110,42 @@ int main(){
 		
 		if (isLoggedIn){
 			if(input == "bid"){
-				//Call bid function
+				if(current->accountType_ == "admin"){
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					cout << "Enter item name:\n";
+					string itemName;
+					cin >> itemName;
+					
+					cout << "Enter seller's username:\n";
+					string seller;
+					cin >> seller;
+					
+					adminAccount->bid(seller, itemName);
+				} else if(current->accountType_ == "full-standard"){
+					FullStandard * fsAccount = dynamic_cast<FullStandard*>(current);
+					cout << "Enter item name:\n";
+					string itemName;
+					cin >> itemName;
+					
+					cout << "Enter seller's username:\n";
+					string seller;
+					cin >> seller;
+					
+					fsAccount->bid(seller, itemName);
+				} else if(current->accountType_ == "buy-standard"){
+					BuyStandard * bsAccount = dynamic_cast<BuyStandard*>(current);
+					cout << "Enter item name:\n";
+					string itemName;
+					cin >> itemName;
+					
+					cout << "Enter seller's username:\n";
+					string seller;
+					cin >> seller;
+					
+					bsAccount->bid(seller, itemName);
+				} else if(current->accountType_ == "sell-standard"){
+					printf("ERROR: standard sell accounts cannot bid\n");
+				}
 			}
 			else if(input == "create"){
 				if(current->accountType_ == "admin"){
