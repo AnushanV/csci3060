@@ -340,7 +340,7 @@ struct Admin : User{
 			std::cout << "ERROR: Username must be less than or equal to 15 characters\n";
 			return;
 		}
-		if (credit > 999999 || credit < 0){
+		if (credit <= 999999 && credit >= 0){
 			std::cout << "ERROR: Credit must be between 0 and 999,999\n";
 			return;
 		}
@@ -423,19 +423,19 @@ struct Admin : User{
 	}
 	
 	void refund(std::string seller, std::string buyer, float amount){
-		// open files
 		std::ifstream iAccFile;
-		std::ofstream oAccFile;
+		std::ofstream oTempFile;
 		
 		iAccFile.open(accountFile);
-		oAccFile.open(accountFile);
 		
 		if(iAccFile.is_open()){
 			std::string line;
-
-			// read each line of account file
-			while(getline(iAccFile, line)){
-				std::string info[3];
+			bool sellerFound = false;
+			bool buyerFound = false;
+			bool negativeCreditError = false;
+			bool tooMuchCreditError = false;
+			while(std::getline(iAccFile, line)){
+				std::string info[4];
 				int infoIndex = 0;
 				
 				char *linechar = new char[line.length() + 1];
@@ -449,24 +449,81 @@ struct Admin : User{
 					tokens = strtok(NULL, " ");
 				}
 				
-				// if it finds the user and seller, change their credits accordingly
 				if(info[0] == seller){
-					info[2] == std::to_string(std::stof(info[2]) - amount);
-					oAccFile << info[0] << " " << info[1] << " " << info[2] << "\n";
+					sellerFound = true;
+					if(std::stoi(info[2]) - amount < 0.0){
+						negativeCreditError = true;
+					}
 				} else if (info[0] == buyer){
-					info[2] == std::to_string(std::stof(info[2]) + amount);
-					oAccFile << info[0] << " " << info[1] << " " << info[2] << "\n";
-				} else {
-					oAccFile << line << "\n";
+					buyerFound = true;
+					if(std::stoi(info[2]) + amount > 999.99){
+						tooMuchCreditError = true;
+					}
 				}
 			}
 			
-			// close files
-			oAccFile.close();
 			iAccFile.close();
 			
+			if(sellerFound && buyerFound){
+				
+				if(tooMuchCreditError && negativeCreditError){
+					printf("ERROR: Buyer will exceed maximum credit and Seller does not have enough credit\n");
+				} else if(tooMuchCreditError){
+					printf("ERROR: Seller does not have enough credit\n");
+				} else if(negativeCreditError){
+					printf("ERROR: Buyer will exceed maximum credit\n");
+				} else {
+					iAccFile.open(accountFile);
+					if(iAccFile.is_open()){
+						oTempFile.open(tempFile);
+						
+						if(oTempFile.is_open()){
+							
+							while(getline(iAccFile, line)){
+								std::string info[4];
+								int infoIndex = 0;
+					
+								char *linechar = new char[line.length() + 1];
+								strcpy(linechar, line.c_str());
+					
+								char* tokens = strtok(linechar, " ");
+					
+								// store each account information
+								while(tokens != NULL){
+									info[infoIndex++] = tokens;
+									tokens = strtok(NULL, " ");
+								}
+									
+								if(info[0] == seller){
+									oTempFile << info[0] << " " << info[1] << " " << (std::stoi(info[2]) - amount) << " " << info[3] << "\n";
+								} else if (info[0] == buyer){
+									oTempFile << info[0] << " " << info[1] << " " << (std::stoi(info[2]) + amount) << " " << info[3] << "\n";
+								} else {
+									oTempFile << line << "\n";
+								}
+							}
+							oTempFile.close();
+							iAccFile.close();
+							updateFile(accountFile, tempFile);
+							printf("Refund successful\n");
+							
+						} else {
+							
+							printf("ERROR: Temp file not found\n");
+						}
+					} else {
+						printf("ERROR: Account file not opened\n");
+					}
+				}
+			} else if(sellerFound && !buyerFound){
+				printf("ERROR: Buyer is not a current user\n");
+			} else if(!sellerFound && buyerFound){
+				printf("ERROR: Seller is not a current user\n");
+			} else{
+				printf("ERROR: Seller and Buyer are not current users\n");
+			}
 		} else {
-			printf("cannot find file");
+			printf("ERROR: Account file not opened\n");
 		}
 	}
 	

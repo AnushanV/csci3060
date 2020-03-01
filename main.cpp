@@ -184,7 +184,24 @@ int main(){
 				}
 			}
 			else if(input == "refund"){
-				//Calls refund function
+				if(current->accountType_ == "admin"){
+					Admin * adminAccount = dynamic_cast<Admin*>(current);
+					cout << "Enter buyer:\n";
+					string buyer;
+					cin >> buyer;
+					
+					cout << "Enter seller:\n";
+					string seller;
+					cin >> seller;
+					
+					cout << "Enter Amount of Credit:\n";
+					double credit;
+					cin >> credit;
+					
+					adminAccount->refund(seller, buyer, credit);
+				} else {
+					cout << "ERROR: Must be an admin to refund\n";
+				}
 			}
 			else if(input != "login"){
 				cout << "ERROR: Not a command\n";
