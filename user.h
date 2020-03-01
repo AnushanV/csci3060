@@ -36,6 +36,7 @@ void updateFile(std::string fileToUpdate, std::string temporaryFile){
 		printf("ERROR: Input file not opened\n");
 	}
 }
+
 float round2Places(float var) 
 { 
     float value = (int)(var * 100 + .5); 
@@ -96,6 +97,7 @@ struct FullStandard : User{
 		bool advertisementFound = false;
 		double currentBid;
 		double newBid;
+		std::string newBidString;
 		
 		iItemFile.open(itemFile);
 		if(iItemFile.is_open()){
@@ -110,7 +112,7 @@ struct FullStandard : User{
 				info[4] = line.substr(62, 6);
 				
 				if(info[1].substr(0, seller.length()) == seller && info[0].substr(0, itemName.length()) == itemName){
-					std::string bidValue = info[4].substr(0, info[4].find_first_of("\t "));
+					std::string bidValue = info[4].substr(info[4].find_first_not_of("0"));
 					currentBid = std::stod(bidValue);
 					advertisementFound = true;
 				}
@@ -121,38 +123,51 @@ struct FullStandard : User{
 			if(advertisementFound){
 				std::cout << "Current bid: " << currentBid << "\n";
 				std::cout << "Enter your bid: \n";
-				std::cin >> newBid;
-				if(newBid <= currentBid*1.05){
-					printf("ERROR: new bid must be at least 5%% greater than highest current bid for standard-buy accounts\n");
-				}
-				
+				std::cin >> newBidString;
+				newBid = std::stod(newBidString);
+				if(newBid <= currentBid * 1.05){
+					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
+					return;
+				} else {
+					printf("Correct bid\n");
+				} 
+		
 				iItemFile.open(itemFile);
-				
+
 				if(iItemFile.is_open()){
 					oTempFile.open(tempFile);
 					
 					if(oTempFile.is_open()){
+
 						while(getline(iItemFile, line)){
 							std::string info[5];
-				
 							info[0] = line.substr(0, 25);
 							info[1] = line.substr(26, 15);
 							info[2] = line.substr(42, 15);
 							info[3] = line.substr(58, 3);
 							info[4] = line.substr(62, 6);
 							
-							if(info[0].substr(0, itemName.length()) == itemName && info[1].substr(0, seller.length()) == seller){
+							std::string possibleItemName = info[0].substr(0, itemName.length());
+							std::string possibleSellerName = info[1].substr(0, seller.length());
+					//		std::cout << newBid << " " << (std::to_string(newBid)).length();
+					//		std::cout << possibleItemName << "end\n" << possibleSellerName << "end\n" << newBid << "end\n";
+					//		std::cout << (possibleItemName.compare(itemName)) << " " << possibleSellerName.compare(seller);
+					
+							if(possibleItemName.compare(itemName) == 0 && possibleSellerName.compare(seller) == 0){
+
 								oTempFile << info[0] << " " << info[1] << " " << username_;
 								for(int i = 0; i < 15 - username_.length(); i++){
 									oTempFile << " ";
 								}
-								
-								oTempFile << " " << info[3] << " " << newBid;
-								for(int i = 0; i < 6 - std::to_string(newBid).length(); i++){
-									oTempFile << " ";
+
+								oTempFile << " " << info[3] << " ";
+								for(int i = 0; i < 6 - newBidString.length(); i++){
+									oTempFile << "0";
 								}
-								oTempFile << "\n";
+
+								oTempFile << newBid << "\n";
 							} else {
+
 								oTempFile << line << "\n";
 							}
 						}
@@ -212,6 +227,7 @@ struct BuyStandard : User{
 		bool advertisementFound = false;
 		double currentBid;
 		double newBid;
+		std::string newBidString;
 		
 		iItemFile.open(itemFile);
 		if(iItemFile.is_open()){
@@ -226,7 +242,7 @@ struct BuyStandard : User{
 				info[4] = line.substr(62, 6);
 				
 				if(info[1].substr(0, seller.length()) == seller && info[0].substr(0, itemName.length()) == itemName){
-					std::string bidValue = info[4].substr(0, info[4].find_first_of("\t "));
+					std::string bidValue = info[4].substr(info[4].find_first_not_of("0"));
 					currentBid = std::stod(bidValue);
 					advertisementFound = true;
 				}
@@ -237,38 +253,51 @@ struct BuyStandard : User{
 			if(advertisementFound){
 				std::cout << "Current bid: " << currentBid << "\n";
 				std::cout << "Enter your bid: \n";
-				std::cin >> newBid;
-				if(newBid <= currentBid*1.05){
-					printf("ERROR: new bid must be at least 5%% greater than highest current bid for standard-buy accounts\n");
-				}
-				
+				std::cin >> newBidString;
+				newBid = std::stod(newBidString);
+				if(newBid <= currentBid * 1.05){
+					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
+					return;
+				} else {
+					printf("Correct bid\n");
+				} 
+		
 				iItemFile.open(itemFile);
-				
+
 				if(iItemFile.is_open()){
 					oTempFile.open(tempFile);
 					
 					if(oTempFile.is_open()){
+
 						while(getline(iItemFile, line)){
 							std::string info[5];
-				
 							info[0] = line.substr(0, 25);
 							info[1] = line.substr(26, 15);
 							info[2] = line.substr(42, 15);
 							info[3] = line.substr(58, 3);
 							info[4] = line.substr(62, 6);
 							
-							if(info[0].substr(0, itemName.length()) == itemName && info[1].substr(0, seller.length()) == seller){
+							std::string possibleItemName = info[0].substr(0, itemName.length());
+							std::string possibleSellerName = info[1].substr(0, seller.length());
+					//		std::cout << newBid << " " << (std::to_string(newBid)).length();
+					//		std::cout << possibleItemName << "end\n" << possibleSellerName << "end\n" << newBid << "end\n";
+					//		std::cout << (possibleItemName.compare(itemName)) << " " << possibleSellerName.compare(seller);
+					
+							if(possibleItemName.compare(itemName) == 0 && possibleSellerName.compare(seller) == 0){
+
 								oTempFile << info[0] << " " << info[1] << " " << username_;
 								for(int i = 0; i < 15 - username_.length(); i++){
 									oTempFile << " ";
 								}
-								
-								oTempFile << " " << info[3] << " " << newBid;
-								for(int i = 0; i < 6 - std::to_string(newBid).length(); i++){
-									oTempFile << " ";
+
+								oTempFile << " " << info[3] << " ";
+								for(int i = 0; i < 6 - newBidString.length(); i++){
+									oTempFile << "0";
 								}
-								oTempFile << "\n";
+
+								oTempFile << newBid << "\n";
 							} else {
+
 								oTempFile << line << "\n";
 							}
 						}
@@ -392,6 +421,7 @@ struct Admin : User{
 		bool advertisementFound = false;
 		double currentBid;
 		double newBid;
+		std::string newBidString;
 		
 		iItemFile.open(itemFile);
 		if(iItemFile.is_open()){
@@ -406,7 +436,7 @@ struct Admin : User{
 				info[4] = line.substr(62, 6);
 				
 				if(info[1].substr(0, seller.length()) == seller && info[0].substr(0, itemName.length()) == itemName){
-					std::string bidValue = info[4].substr(0, info[4].find_first_of("\t "));
+					std::string bidValue = info[4].substr(info[4].find_first_not_of("0"));
 					currentBid = std::stod(bidValue);
 					advertisementFound = true;
 				}
@@ -417,18 +447,22 @@ struct Admin : User{
 			if(advertisementFound){
 				std::cout << "Current bid: " << currentBid << "\n";
 				std::cout << "Enter your bid: \n";
-				std::cin >> newBid;
-				std::cout << newBid;
+				std::cin >> newBidString;
+				newBid = std::stod(newBidString);
 				if(newBid <= currentBid){
 					printf("ERROR: new bid must be greater than highest current bid\n");
 					return;
-				}
+				} else {
+					printf("Correct bid\n");
+				} 
+		
 				iItemFile.open(itemFile);
 
 				if(iItemFile.is_open()){
 					oTempFile.open(tempFile);
 					
 					if(oTempFile.is_open()){
+
 						while(getline(iItemFile, line)){
 							std::string info[5];
 							info[0] = line.substr(0, 25);
@@ -437,17 +471,22 @@ struct Admin : User{
 							info[3] = line.substr(58, 3);
 							info[4] = line.substr(62, 6);
 							
-							if(info[0].substr(0, itemName.length()) == itemName && info[1].substr(0, seller.length()) == seller){
+							std::string possibleItemName = info[0].substr(0, itemName.length());
+							std::string possibleSellerName = info[1].substr(0, seller.length());
+					//		std::cout << newBid << " " << (std::to_string(newBid)).length();
+					//		std::cout << possibleItemName << "end\n" << possibleSellerName << "end\n" << newBid << "end\n";
+					//		std::cout << (possibleItemName.compare(itemName)) << " " << possibleSellerName.compare(seller);
+					
+							if(possibleItemName.compare(itemName) == 0 && possibleSellerName.compare(seller) == 0){
 								oTempFile << info[0] << " " << info[1] << " " << username_;
 								for(int i = 0; i < 15 - username_.length(); i++){
 									oTempFile << " ";
 								}
-								
-								oTempFile << " " << info[3] << " " << newBid;
-								for(int i = 0; i < 6 - std::to_string(newBid).length(); i++){
-									oTempFile << " ";
+								oTempFile << " " << info[3] << " ";
+								for(int i = 0; i < 6 - newBidString.length(); i++){
+									oTempFile << "0";
 								}
-								oTempFile << "\n";
+								oTempFile << newBid << "\n";
 							} else {
 								oTempFile << line << "\n";
 							}

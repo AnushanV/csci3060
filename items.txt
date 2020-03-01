@@ -1,1 +1,1 @@
-newitemname               ss               fs             10  4     
+newitemname               ss              admin           010 0008.2
