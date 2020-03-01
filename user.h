@@ -118,6 +118,22 @@ struct User{
 	
 	void createUser(std::string username, std::string type, double credit, std::string password){ printf("ERROR: No permission to use createUser");}
 	
+	std::string getType(){
+		if (accountType_ == "admin"){
+			return "AA";
+		}
+		else if (accountType_ == "buy-standard"){
+			return "BS";
+		}
+		else if (accountType_ == "sell-standard"){
+			return "SS";
+		}
+		else if (accountType_ == "full-standard"){
+			return "FS";
+		}
+		return "_";
+	}
+	
 };
 
 struct FullStandard : User{
