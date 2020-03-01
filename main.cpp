@@ -17,6 +17,7 @@ int main(){
 	
 	cout << "Please login to the system\n";
 	bool isLoggedIn = false;
+	bool hasAdvertised = false;
 	//Calls login class
 	User * current;
 	string transactions = "";
@@ -114,7 +115,8 @@ int main(){
 					Admin * adminAccount = dynamic_cast<Admin*>(current);
 					cout << "Enter item name:\n";
 					string itemName;
-					cin >> itemName;
+					getline(cin, itemName); //buffer
+					getline(cin, itemName);
 					
 					cout << "Enter seller's username:\n";
 					string seller;
@@ -184,6 +186,7 @@ int main(){
 				
 				current = NULL;
 				isLoggedIn = false;
+				hasAdvertised = false; //reset advertisement restriction
 				cout << "Logout Successful\n";
 				
 				//output daily transactions
@@ -227,9 +230,95 @@ int main(){
 				
 				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 			}
+			
 			else if(input == "advertise"){
-				//Calls advertise function
+				//Cannot have advertised and can't be a buy standard account
+
+				if(!hasAdvertised and current->accountType_!= "buy-standard"){
+					//Needed Variables
+					string seller = current->username_;
+					string adItem = "";
+					string sMinBid;
+					int duration;
+
+					cout << "Enter item name:\n";
+					
+					getline(cin, adItem); //buffer
+					getline(cin, adItem);
+					
+					if(adItem.length() >= 25){ 
+						cout << "ERROR:  item name cannot exceed 25 characters\n";
+					}
+					
+					cout << "Enter minimum bid:\n";
+
+					cin >> sMinBid;
+					if(stod(sMinBid)>1000){
+						cout << "ERROR: item price cannot exceed 999.99\n";
+					}
+					
+					int decimalPos = sMinBid.find('.');
+					if (decimalPos == string::npos){
+						sMinBid += ".00";
+					}
+					else if (decimalPos == sMinBid.length()-2){
+						sMinBid += "0";
+					}
+					else{
+						sMinBid = sMinBid.substr(0, decimalPos + 3);
+					}
+					
+					cout << "Enter auction duration:\n";
+					cin >> duration;
+				    if(duration>=100){
+						cout << "ERROR: auction cannot exceed 100 days\n";
+					}
+					
+					//Correcting the formatting
+					string currentHighestBid = ""; //No current highest bid though
+					string sDuration = to_string(duration);
+					
+					while(adItem.length() < 25) adItem = adItem + " ";
+					if(duration > 9 and duration != 100) sDuration = "0" + sDuration;
+					else sDuration = "00" + sDuration;
+					while(sMinBid.length()<6) sMinBid = "0" + sMinBid;
+					while(seller.length() < 15) seller = seller + " ";
+					while(currentHighestBid.length() < 15) currentHighestBid = currentHighestBid + " ";
+					
+					//Recording to file
+					//Open file stream in append mode
+					ofstream adAppend;
+					adAppend.open("items.txt", ofstream::out | ofstream::app);
+					if (adAppend.is_open()){
+						adAppend << adItem;
+						adAppend << " ";
+						adAppend << seller;
+						adAppend << " ";
+						adAppend << currentHighestBid;
+						adAppend << " ";
+						adAppend << sDuration;
+						adAppend << " ";
+						adAppend << sMinBid;
+						adAppend << "\n";
+						
+						cout << "Item Listed Successfully\n";
+						
+						adAppend.close();
+					}
+					else{
+						cout << "ERROR: Cannot output ad to file\n";
+					}
+		        }
+
+				else if (hasAdvertised){
+					cout << "ERROR: Cannot advertise more than once per session\n";
+
+				}
+				else{
+					cout << "ERROR: buy-standard account type cannot advertise\n";
+				}
 			}
+			
 			else if(input == "delete"){
 				if (current->accountType_ == "admin"){
 					

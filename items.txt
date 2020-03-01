@@ -1,1 +1,3 @@
 newitemname               ss              admin           010 0008.2
+joe man                   admin                           003 003.00
+new item xd               admin           admin           001 000003

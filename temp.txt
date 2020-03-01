@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 newitemname               ss              admin           010 0008.2
-=======
-admin AA 19 password
-fs FS 12 password
-ss SS 20 password
-bs BS 10 password
->>>>>>> b8b2435b106f7d61cd97f14cc72c9c0629526ada
+joe man                   admin                           003 003.00
+new item xd               admin           admin           001 000003
