@@ -6,6 +6,7 @@
 #include <string.h>
 const char* accountFile = "accounts.txt";
 const char* tempFile = "temp.txt";
+const char* itemFile = "items.txt";
 
 // Copies information from temporary file to the main file
 void updateFile(std::string fileToUpdate, std::string temporaryFile){
@@ -248,23 +249,68 @@ struct Admin : User{
 		}
 	}
 	
-	void bid(){
-		std::string itemName;
-		std::string seller;
-		float bidAmount;
+	void bid(std::string seller, std::string itemName, float bidAmount){
+		std::ifstream iItemFile;
+		std::ofstream oTempFile;
+		bool advertisementFound = false;
 		
-		// prompt user for info
-		printf("Enter item name: ");
-		std::cin >> itemName;
-		
-		printf("Enter seller's username: ");
-		std::cin >> seller;
-		
-		printf("Enter amount you want to bid: ");
-		std::cin >> bidAmount;
-		
-		// create a new bid
-		Bid(username_, seller, itemName, bidAmount);
+		iItemFile.open(itemFile);
+		if(iItemFile.is_open()){
+			std::string line;
+			while(getline(iItemFile, line)){
+				std::string info[5];
+				
+				info[0] = line.substr(0, 25);
+				info[1] = line.substr(26, 15);
+				info[2] = line.substr(32, 15);
+				info[3] = line.substr(48, 3);
+				info[4] = line.substr(52, 6);
+				
+				if(info[1].substr(0, seller.length()) == seller && info[0].substr(0, itemName.length()) == itemName){
+					advertisementFound = true;
+				}
+			}
+			
+			iItemFile.close();
+			
+			if(advertisementFound){
+				iItemFile.open(itemFile);
+				
+				if(iItemFile.is_open()){
+					oTempFile.open(tempFile);
+					
+					if(oTempFile.is_open()){
+						while(getline(iItemFile, line)){
+							std::string info[5];
+				
+							info[0] = line.substr(0, 25);
+							info[1] = line.substr(26, 15);
+							info[2] = line.substr(32, 15);
+							info[3] = line.substr(48, 3);
+							info[4] = line.substr(52, 6);
+							
+							if(info[0].substr(0, itemName.length()) == itemName && info[1].substr(0, seller.length()) == seller){
+								oTempFile << info[0] << " " << info[1] << " " << username_ << " " << info[3] << " " << bidAmount << "\n";
+							} else {
+								oTempFile << line << "\n";
+							}
+						}
+						
+						iItemFile.close();
+						oTempFile.close();
+						updateFile(itemFile, tempFile);
+					} else {
+						printf("ERROR: Temp file not opened\n");
+					}				
+				
+				} else {
+					printf("ERROR: Item file not opened\n");
+				}
+			}
+			
+		} else {
+			printf("ERROR: Item file not opened\n");
+		}
 	}
 	
 	void advertise(){
