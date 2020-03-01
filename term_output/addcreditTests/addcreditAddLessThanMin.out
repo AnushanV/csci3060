@@ -3,7 +3,6 @@ Enter username:
 Enter password:
 Login Successful
 Enter Amount:
-Amount Added
-User Balance Readjusted
+ERROR: amount entered is not greater than 0
 Logout Successful
 Transactions Listed

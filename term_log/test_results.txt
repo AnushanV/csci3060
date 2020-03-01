@@ -1,5 +1,5 @@
 TEST addcreditTests/addcreditAddLessThanMin: BAD
-TEST addcreditTests/addcreditAddMoreThanMax: BAD
+TEST addcreditTests/addcreditAddMoreThanMax: GOOD
 TEST addcreditTests/addcreditNotLoggedIn: GOOD
 TEST addcreditTests/addcreditSuccess: GOOD
 TEST addcreditTests/addcreditUserExists: BAD

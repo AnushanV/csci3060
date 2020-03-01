@@ -1,30 +1,10 @@
 Please login to the system
 Enter username:
 Enter password:
-ERROR: Entered username and password combination does not exist
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
-ERROR: User is not logged in
+Login Successful
+Enter item name:
+ERROR:  item name cannot exceed 25 characters
+Enter minimum bid:
+Enter auction duration:
+Logout Successful
+Transactions Listed

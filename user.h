@@ -357,6 +357,13 @@ struct Admin : User{
 	
 	void deleteUser(std::string userToDelete){
 		
+		//check for valid input
+		if (userToDelete == username_){
+			std::cout << "ERROR: Cannot delete the current user\n";
+			return;
+		}
+		
+		
 		// remove the user on account file
 		// open files
 		std::ifstream iAccFile;

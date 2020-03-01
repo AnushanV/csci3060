@@ -3,5 +3,6 @@ Enter username:
 Enter password:
 Login Successful
 Enter user to be deleted:
-Account FoundLogout Successful
+ERROR: Cannot delete the current user
+Logout Successful
 Transactions Listed

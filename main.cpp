@@ -13,7 +13,17 @@ Program call prompts the user for the actions that want to take
 
 using namespace std;
 
-int main(){
+int main(int argc, char *argv[]){
+	
+	const char* dtf;
+	
+	if (argc > 1){
+		dtf = argv[1];
+	}
+	else{
+		dtf = "dailyTransactions.dt";
+	}
+	
 	
 	cout << "Please login to the system\n";
 	bool isLoggedIn = false;
@@ -21,7 +31,7 @@ int main(){
 	//Calls login class
 	User * current;
 	string transactions = "";
-	const char* dtf = "dailyTransactions.dt";
+	
 	
 	while(1){
 		//We would also have a check here to see if the user is null to make sure a user with permissions is logged in
@@ -240,6 +250,7 @@ int main(){
 					string adItem = "";
 					string sMinBid;
 					int duration;
+					bool validAction = true;
 
 					cout << "Enter item name:\n";
 					
@@ -248,65 +259,70 @@ int main(){
 					
 					if(adItem.length() >= 25){ 
 						cout << "ERROR:  item name cannot exceed 25 characters\n";
+						validAction = false;
 					}
 					
 					cout << "Enter minimum bid:\n";
 
 					cin >> sMinBid;
-					if(stod(sMinBid)>1000){
+					if(stod(sMinBid)>=1000){
 						cout << "ERROR: item price cannot exceed 999.99\n";
-					}
-					
-					int decimalPos = sMinBid.find('.');
-					if (decimalPos == string::npos){
-						sMinBid += ".00";
-					}
-					else if (decimalPos == sMinBid.length()-2){
-						sMinBid += "0";
-					}
-					else{
-						sMinBid = sMinBid.substr(0, decimalPos + 3);
+						validAction = false;
 					}
 					
 					cout << "Enter auction duration:\n";
 					cin >> duration;
-				    if(duration>=100){
+					if(duration >= 100){
 						cout << "ERROR: auction cannot exceed 100 days\n";
+						validAction = false;
 					}
-					
-					//Correcting the formatting
-					string currentHighestBid = ""; //No current highest bid though
-					string sDuration = to_string(duration);
-					
-					while(adItem.length() < 25) adItem = adItem + " ";
-					if(duration > 9 and duration != 100) sDuration = "0" + sDuration;
-					else sDuration = "00" + sDuration;
-					while(sMinBid.length()<6) sMinBid = "0" + sMinBid;
-					while(seller.length() < 15) seller = seller + " ";
-					while(currentHighestBid.length() < 15) currentHighestBid = currentHighestBid + " ";
-					
-					//Recording to file
-					//Open file stream in append mode
-					ofstream adAppend;
-					adAppend.open("items.txt", ofstream::out | ofstream::app);
-					if (adAppend.is_open()){
-						adAppend << adItem;
-						adAppend << " ";
-						adAppend << seller;
-						adAppend << " ";
-						adAppend << currentHighestBid;
-						adAppend << " ";
-						adAppend << sDuration;
-						adAppend << " ";
-						adAppend << sMinBid;
-						adAppend << "\n";
 						
-						cout << "Item Listed Successfully\n";
+					if (validAction){
+						int decimalPos = sMinBid.find('.');
+						if (decimalPos == string::npos){
+							sMinBid += ".00";
+						}
+						else if (decimalPos == sMinBid.length()-2){
+							sMinBid += "0";
+						}
+						else{
+							sMinBid = sMinBid.substr(0, decimalPos + 3);
+						}
 						
-						adAppend.close();
-					}
-					else{
-						cout << "ERROR: Cannot output ad to file\n";
+						//Correcting the formatting
+						string currentHighestBid = ""; //No current highest bid though
+						string sDuration = to_string(duration);
+						
+						while(adItem.length() < 25) adItem = adItem + " ";
+						if(duration > 9 and duration != 100) sDuration = "0" + sDuration;
+						else sDuration = "00" + sDuration;
+						while(sMinBid.length()<6) sMinBid = "0" + sMinBid;
+						while(seller.length() < 15) seller = seller + " ";
+						while(currentHighestBid.length() < 15) currentHighestBid = currentHighestBid + " ";
+						
+						//Recording to file
+						//Open file stream in append mode
+						ofstream adAppend;
+						adAppend.open("items.txt", ofstream::out | ofstream::app);
+						if (adAppend.is_open()){
+							adAppend << adItem;
+							adAppend << " ";
+							adAppend << seller;
+							adAppend << " ";
+							adAppend << currentHighestBid;
+							adAppend << " ";
+							adAppend << sDuration;
+							adAppend << " ";
+							adAppend << sMinBid;
+							adAppend << "\n";
+							
+							cout << "Item Listed Successfully\n";
+							hasAdvertised = true;
+							adAppend.close();
+						}
+						else{
+							cout << "ERROR: Cannot output ad to file\n";
+						}
 					}
 		        }
 

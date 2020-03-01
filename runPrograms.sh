@@ -15,6 +15,6 @@ do
 	fi
 	
 	#run the program
-	./main accounts.txt items.txt output/$test.out < input/$test.in > term_output/$test.out
+	./main output/$test.dt < input/$test.in > term_output/$test.out
 	
 done
