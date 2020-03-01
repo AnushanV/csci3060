@@ -17,6 +17,7 @@ int main(){
 	
 	cout << "Please login to the system\n";
 	bool isLoggedIn = false;
+	bool hasAdvertised = false; //Can only advertise once 
 	//Calls login class
 	User * current;
 	string transactions = "";
@@ -110,42 +111,7 @@ int main(){
 		
 		if (isLoggedIn){
 			if(input == "bid"){
-				if(current->accountType_ == "admin"){
-					Admin * adminAccount = dynamic_cast<Admin*>(current);
-					cout << "Enter item name:\n";
-					string itemName;
-					cin >> itemName;
-					
-					cout << "Enter seller's username:\n";
-					string seller;
-					cin >> seller;
-					
-					adminAccount->bid(seller, itemName);
-				} else if(current->accountType_ == "full-standard"){
-					FullStandard * fsAccount = dynamic_cast<FullStandard*>(current);
-					cout << "Enter item name:\n";
-					string itemName;
-					cin >> itemName;
-					
-					cout << "Enter seller's username:\n";
-					string seller;
-					cin >> seller;
-					
-					fsAccount->bid(seller, itemName);
-				} else if(current->accountType_ == "buy-standard"){
-					BuyStandard * bsAccount = dynamic_cast<BuyStandard*>(current);
-					cout << "Enter item name:\n";
-					string itemName;
-					cin >> itemName;
-					
-					cout << "Enter seller's username:\n";
-					string seller;
-					cin >> seller;
-					
-					bsAccount->bid(seller, itemName);
-				} else if(current->accountType_ == "sell-standard"){
-					printf("ERROR: standard sell accounts cannot bid\n");
-				}
+				//Call bid function
 			}
 			else if(input == "create"){
 				if(current->accountType_ == "admin"){
@@ -171,7 +137,7 @@ int main(){
 					adminAccount->createUser(newUsername, newType, newCredit, newPassword);
 					
 					//add transaction
-					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 					
 				} else {
 					cout << "ERROR: Cannot create user with a non-admin account\n";
@@ -180,10 +146,11 @@ int main(){
 			else if(input == "logout"){
 				//Calls logout function
 				//delete current;
-				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 				
 				current = NULL;
 				isLoggedIn = false;
+				hasAdvertised = false; //Needed for Advertise command
 				cout << "Logout Successful\n";
 				
 				//output daily transactions
@@ -225,10 +192,79 @@ int main(){
 					adminAccount->addCredit(amountToAdd, userToAdd);
 				}
 				
-				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 			}
 			else if(input == "advertise"){
-				//Calls advertise function
+				//Cannot have advertised and can't be a buy standard account
+
+				if(!hasAdvertised and current->accountType_!= "buy-standard"){
+					//Needed Variables
+					string seller = current->username_;
+					string adItem;
+					double minBid;
+					int duration;
+
+					cout << "Enter item name:\n";
+					cin >> adItem;
+					if(adItem.length() >= 25){ 
+						cout << "ERROR:  item name cannot exceed 25 characters\n";
+					}
+					cout << "Enter minimum bid:\n";
+					cin >> minBid;
+					if(midBid>1000){
+						cout << "ERROR: item price cannot exceed 999.99\n";
+					}
+					cout << "Enter auction duration:\n";
+					cin >> duration;
+				    if(duration>=100){
+						cout << "ERROR: auction cannot exceed 100 days\n";
+					}
+					//Correcting the formatting
+					currentHighestBid = ""; //No current highest bid though
+					sDuration = to_string(duration);
+					sMinBid = to_string(minBid);
+					while(adItem.length() < 26) adItem = adItem + " ";
+					if(duration > 9 and duration != 100) sDuration = 0 + sDuration;
+					else sDuration = 0 + 0 + sDuration;
+					while(sMinBid.length()<7) sMinBid = 0 + sMinBid;
+					while(seller.length() < 16) seller = seller + " ";
+					while(currentHighestBid.length() < 16) currentHighestBid = currentHighestBid + " ";
+
+
+
+
+					//Recording to file
+					//Open file stream in append mode
+					ofstream adAppend;
+					adAppend.open("items.txt", ofstream::out | ofstream::app);
+					if (adAppend.is_open()){
+						adAppend >> adItem;
+						adAppend >> " ";
+						adAppend >> seller;
+						adAppend >> " ";
+						adAppend >> currentHighestBid;
+						adAppend >> " ";
+						adAppend >> sDuration;
+						adAppend >> " ";
+						adAppend >> sMinBid;
+					}
+					else{
+						cout << "ERROR: Cannot output ad to file\n";
+					}
+
+
+
+
+
+ 
+				}
+				else if (hasAdvertised){
+					cout << "ERROR: Cannot advertise more than once per session\n";
+
+				}
+				else{
+					cout << "ERROR: buy-standard account type cannot advertise\n"
+				}
 			}
 			else if(input == "delete"){
 				if (current->accountType_ == "admin"){
@@ -240,7 +276,7 @@ int main(){
 					cin >> userToDelete;
 					adminAccount->deleteUser(userToDelete);
 					
-					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + ".00\n";
+					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
 				}
 				else{
 					cout << "ERROR: Cannot delete user with a non-admin account\n";
@@ -260,6 +296,8 @@ int main(){
 					cout << "Enter Amount of Credit:\n";
 					double credit;
 					cin >> credit;
+					
+					transactions += "05 " + buyer + " " + seller + " " + to_string((int)credit) + "\n";
 					
 					adminAccount->refund(seller, buyer, credit);
 				} else {
