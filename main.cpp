@@ -200,29 +200,49 @@ int main(){
 				if(!hasAdvertised and current->accountType_!= "buy-standard"){
 					//Needed Variables
 					string seller = current->username_;
-					string adItem;
-					double minBid;
+					string adItem = "";
+					string sMinBid;
 					int duration;
 
 					cout << "Enter item name:\n";
-					cin >> adItem;
+					
+					getline(cin, adItem); //buffer
+					getline(cin, adItem);
+					
 					if(adItem.length() >= 25){ 
 						cout << "ERROR:  item name cannot exceed 25 characters\n";
 					}
+					
 					cout << "Enter minimum bid:\n";
-					cin >> minBid;
-					if(minBid>1000){
+					cin >> sMinBid;
+					if(stod(sMinBid)>1000){
 						cout << "ERROR: item price cannot exceed 999.99\n";
 					}
+					
+					int decimalPos = sMinBid.find('.');
+					if (decimalPos == string::npos){
+						sMinBid += ".00";
+					}
+					else if (decimalPos == sMinBid.length()-2){
+						sMinBid += "0";
+					}
+					else{
+						sMinBid = sMinBid.substr(0, decimalPos + 3);
+					}
+					
+					
+					
 					cout << "Enter auction duration:\n";
 					cin >> duration;
 				    if(duration>=100){
 						cout << "ERROR: auction cannot exceed 100 days\n";
 					}
+					
+					
 					//Correcting the formatting
 					string currentHighestBid = ""; //No current highest bid though
 					string sDuration = to_string(duration);
-					string sMinBid = to_string(minBid);
+					
 					while(adItem.length() < 25) adItem = adItem + " ";
 					if(duration > 9 and duration != 100) sDuration = "0" + sDuration;
 					else sDuration = "00" + sDuration;
@@ -247,6 +267,7 @@ int main(){
 						adAppend << "\n";
 						
 						cout << "Item Listed Successfully\n";
+						hasAdvertised = true;
 					}
 					else{
 						cout << "ERROR: Cannot output ad to file\n";
