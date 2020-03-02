@@ -1,10 +1,11 @@
 Please login to the system
 Enter username:
 Enter password:
-Login Successful
+Login successful
 Enter username for new user:
 Enter password for new user:
 Enter account type for new user:
 Enter credit for new user:
-ERROR: Username already takenLogout Successful
+ERROR: Credit must be between 0 and 999,999
+Logout Successful
 Transactions Listed

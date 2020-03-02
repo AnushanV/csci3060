@@ -85,7 +85,7 @@ int main(int argc, char *argv[]){
 						//cout <<info[0] + " " + info[3] + "\n";
 						
 						if(username.compare(info[0]) == 0 && password.compare(info[3]) == 0){
-							cout << "Login Successful\n";
+							cout << "Login successful\n";
 							accountFound = true;
 							isLoggedIn = true;
 							
@@ -132,7 +132,12 @@ int main(int argc, char *argv[]){
 					string seller;
 					cin >> seller;
 					
-					adminAccount->bid(seller, itemName);
+					string bidPlaced = adminAccount->bid(seller, itemName);
+					
+					if (!(bidPlaced == "")){
+						transactions += "04 " + itemName + " " + seller + " " + current->username_ + " " + bidPlaced + "\n";	
+					}
+					
 				} else if(current->accountType_ == "full-standard"){
 					FullStandard * fsAccount = dynamic_cast<FullStandard*>(current);
 					cout << "Enter item name:\n";
@@ -143,7 +148,12 @@ int main(int argc, char *argv[]){
 					string seller;
 					cin >> seller;
 					
-					fsAccount->bid(seller, itemName);
+					string bidPlaced = fsAccount->bid(seller, itemName);
+					
+					if (!(bidPlaced == "")){
+						transactions += "04 " + itemName + " " + seller + " " + current->username_ + " " + bidPlaced + "\n";	
+					}
+					
 				} else if(current->accountType_ == "buy-standard"){
 					BuyStandard * bsAccount = dynamic_cast<BuyStandard*>(current);
 					cout << "Enter item name:\n";
@@ -154,7 +164,12 @@ int main(int argc, char *argv[]){
 					string seller;
 					cin >> seller;
 					
-					bsAccount->bid(seller, itemName);
+					string bidPlaced = bsAccount->bid(seller, itemName);
+					
+					if (!(bidPlaced == "")){
+						transactions += "04 " + itemName + " " + seller + " " + current->username_ + " " + bidPlaced + "\n";	
+					}
+					
 				} else if(current->accountType_ == "sell-standard"){
 					printf("ERROR: standard sell accounts cannot bid\n");
 				}
@@ -183,7 +198,7 @@ int main(int argc, char *argv[]){
 					adminAccount->createUser(newUsername, newType, newCredit, newPassword);
 					
 					//add transaction
-					transactions += "01 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
+					transactions += "01 " + current->username_ + " " + current->getType() + " " + current->getCreditString() + "\n";
 					
 				} else {
 					cout << "ERROR: Cannot create user with a non-admin account\n";
@@ -192,7 +207,7 @@ int main(int argc, char *argv[]){
 			else if(input == "logout"){
 				//Calls logout function
 				//delete current;
-				transactions += "00 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
+				transactions += "00 " + current->username_ + " " + current->getType() + " " + current->getCreditString() + "\n";
 				
 				current = NULL;
 				isLoggedIn = false;
@@ -238,7 +253,7 @@ int main(int argc, char *argv[]){
 					adminAccount->addCredit(amountToAdd, userToAdd);
 				}
 				
-				transactions += "06 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
+				transactions += "06 " + current->username_ + " " + current->getType() + " " + current->getCreditString() + "\n";
 			}
 			
 			else if(input == "advertise"){
@@ -257,21 +272,25 @@ int main(int argc, char *argv[]){
 					getline(cin, adItem); //buffer
 					getline(cin, adItem);
 					
-					if(adItem.length() >= 25){ 
-						cout << "ERROR:  item name cannot exceed 25 characters\n";
-						validAction = false;
-					}
-					
 					cout << "Enter minimum bid:\n";
 
 					cin >> sMinBid;
+					
+					cout << "Enter auction duration:\n";
+					cin >> duration;
+					
+					//error check
+					if(adItem.length() >= 25){ 
+						cout << "ERROR: item name cannot exceed 25 characters\n";
+						validAction = false;
+					}
+					
+					
 					if(stod(sMinBid)>=1000){
 						cout << "ERROR: item price cannot exceed 999.99\n";
 						validAction = false;
 					}
 					
-					cout << "Enter auction duration:\n";
-					cin >> duration;
 					if(duration >= 100){
 						cout << "ERROR: auction cannot exceed 100 days\n";
 						validAction = false;
@@ -319,6 +338,8 @@ int main(int argc, char *argv[]){
 							cout << "Item Listed Successfully\n";
 							hasAdvertised = true;
 							adAppend.close();
+							
+							transactions += "03 " + adItem + " " + seller + " " + sDuration + " " + sMinBid + "\n";
 						}
 						else{
 							cout << "ERROR: Cannot output ad to file\n";
@@ -345,7 +366,7 @@ int main(int argc, char *argv[]){
 					cin >> userToDelete;
 					adminAccount->deleteUser(userToDelete);
 					
-					transactions += "02 " + current->username_ + " " + current->getType() + " " + to_string((int)current->credit_) + "\n";
+					transactions += "02 " + current->username_ + " " + current->getType() + " " + current->getCreditString() + "\n";
 				}
 				else{
 					cout << "ERROR: Cannot delete user with a non-admin account\n";

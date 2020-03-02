@@ -1,10 +1,10 @@
 Please login to the system
 Enter username:
 Enter password:
-Login Successful
+Login successful
 Enter buyer:
 Enter seller:
 Enter Amount of Credit:
-ERROR: Seller and Buyer are not current users
+ERROR: Seller does not have enough credit
 Logout Successful
 Transactions Listed

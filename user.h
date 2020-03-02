@@ -81,6 +81,23 @@ struct User{
 		return "_";
 	}
 	
+	std::string getCreditString(){
+		std::string sCredit = std::to_string(credit_);
+		
+		int decimalPos = sCredit.find('.');
+		if (decimalPos == string::npos){
+			sCredit += ".00";
+		}
+		else if (decimalPos == sCredit.length()-2){
+			sCredit += "0";
+		}
+		else{
+			sCredit = sCredit.substr(0, decimalPos + 3);
+		}
+		
+		return sCredit;
+	}
+	
 };
 
 struct FullStandard : User{
@@ -91,7 +108,7 @@ struct FullStandard : User{
 		// intentionally left blank
 	}
 	
-	void bid(std::string seller, std::string itemName){
+	std::string bid(std::string seller, std::string itemName){
 		std::ifstream iItemFile;
 		std::ofstream oTempFile;
 		bool advertisementFound = false;
@@ -127,7 +144,7 @@ struct FullStandard : User{
 				newBid = std::stod(newBidString);
 				if(newBid <= currentBid * 1.05){
 					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
-					return;
+					return NULL;
 				}
 		
 				iItemFile.open(itemFile);
@@ -174,6 +191,8 @@ struct FullStandard : User{
 						oTempFile.close();
 						updateFile(itemFile, tempFile);
 						printf("Bid placed\n");
+						
+						return newBidString;
 					} else {
 						printf("ERROR: Temp file not opened\n");
 					}				
@@ -188,6 +207,8 @@ struct FullStandard : User{
 		} else {
 			printf("ERROR: Item file not opened\n");
 		}
+		
+		return "";
 	}
 	
 	void advertise(){
@@ -219,7 +240,7 @@ struct BuyStandard : User{
 		// intentionally left blank
 	}
 	
-	void bid(std::string seller, std::string itemName){
+	std::string bid(std::string seller, std::string itemName){
 		std::ifstream iItemFile;
 		std::ofstream oTempFile;
 		bool advertisementFound = false;
@@ -255,7 +276,7 @@ struct BuyStandard : User{
 				newBid = std::stod(newBidString);
 				if(newBid <= currentBid * 1.05){
 					printf("ERROR: new bid must be at least 5%% greater than the current highest bid for standard-buy accounts\n");
-					return;
+					return "";
 				} 
 		
 				iItemFile.open(itemFile);
@@ -302,6 +323,9 @@ struct BuyStandard : User{
 						oTempFile.close();
 						updateFile(itemFile, tempFile);
 						printf("Bid placed\n");
+						
+						return newBidString;
+						
 					} else {
 						printf("ERROR: Temp file not opened\n");
 					}				
@@ -316,6 +340,8 @@ struct BuyStandard : User{
 		} else {
 			printf("ERROR: Item file not opened\n");
 		}
+		
+		return "";
 	}
 };
 
@@ -403,9 +429,8 @@ struct Admin : User{
 					accounts += "\n";
 				}
 			}
-			if(accountFound){
-				// removes the last account that should already be stored, lowering account count to 1
-				//oAccFile << "\n";
+			if(!accountFound){
+				std::cout << "ERROR: That user does not exist\n";
 			}
 			oAccFile.open(accountFile);
 			oAccFile << accounts;
@@ -418,7 +443,7 @@ struct Admin : User{
 		}
 	}
 	
-	void bid(std::string seller, std::string itemName){
+	std::string bid(std::string seller, std::string itemName){
 		std::ifstream iItemFile;
 		std::ofstream oTempFile;
 		bool advertisementFound = false;
@@ -454,7 +479,7 @@ struct Admin : User{
 				newBid = std::stod(newBidString);
 				if(newBid <= currentBid){
 					printf("ERROR: new bid must be greater than highest current bid\n");
-					return;
+					return "";
 				}
 		
 				iItemFile.open(itemFile);
@@ -497,6 +522,9 @@ struct Admin : User{
 						oTempFile.close();
 						updateFile(itemFile, tempFile);
 						printf("Bid placed\n");
+						
+						return newBidString;
+						
 					} else {
 						printf("ERROR: Temp file not opened\n");
 					}				
@@ -511,6 +539,8 @@ struct Admin : User{
 		} else {
 			printf("ERROR: Item file not opened\n");
 		}
+		
+		return "";
 	}
 	
 	void advertise(){
@@ -539,7 +569,7 @@ struct Admin : User{
 			std::cout << "ERROR: Username must be less than or equal to 15 characters\n";
 			return;
 		}
-		if (credit <= 999999 && credit >= 0){
+		if (!(credit < 1000 && credit >= 0)){
 			std::cout << "ERROR: Credit must be between 0 and 999,999\n";
 			return;
 		}
@@ -614,7 +644,7 @@ struct Admin : User{
 					}
 				}
 			} else {
-				printf("ERROR: Username already taken");
+				printf("ERROR: Username already taken\n");
 			}
 		} else {
 			printf("ERROR: Account file not opened\n");
@@ -668,9 +698,9 @@ struct Admin : User{
 					
 					if(tooMuchCreditError && negativeCreditError){
 						printf("ERROR: Buyer will exceed maximum credit and Seller does not have enough credit\n");
-					} else if(tooMuchCreditError){
-						printf("ERROR: Seller does not have enough credit\n");
 					} else if(negativeCreditError){
+						printf("ERROR: Seller does not have enough credit\n");
+					} else if(tooMuchCreditError){
 						printf("ERROR: Buyer will exceed maximum credit\n");
 					} else {
 						iAccFile.open(accountFile);

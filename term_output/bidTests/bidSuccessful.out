@@ -1,11 +1,11 @@
 Please login to the system
 Enter username:
 Enter password:
-Login Successful
+Login successful
 Enter item name:
 Enter seller's username:
-ERROR: Auction not found
-ERROR: Not a command
-ERROR: Not a command
+Current bid: 400
+Enter your bid: 
+ERROR: new bid must be at least 5% greater than the current highest bid for standard-buy accounts
 Logout Successful
 Transactions Listed

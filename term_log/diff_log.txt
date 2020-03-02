@@ -1,374 +1,86 @@
 TEST addcreditTests/addcreditAddLessThanMin:
-4c4
-< Login successful
----
-> Login Successful
-
-
+TEST addcreditTests/addcreditAddMoreThanMax:
+TEST addcreditTests/addcreditNotLoggedIn:
+TEST addcreditTests/addcreditSuccess:
 TEST addcreditTests/addcreditUserExists:
-5c5
-< Enter Amount:
----
-> Enter amount:
-
-
 TEST advertiseTests/advertiseAdLimit:
-4c4
-< Login successful
----
-> Login Successful
-8c8
-< Item Successfully Advertised
----
-> Item Listed Successfully
-
-
 TEST advertiseTests/advertiseBidCap:
-4c4
-< Login successful
----
-> Login Successful
-7a8
-> Enter auction duration:
-9c10
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST advertiseTests/advertiseBuyAccount:
-4c4
-< Login successful
----
-> Login Successful
-7c7
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST advertiseTests/advertiseCharLimit:
-4c4
-< Login successful
----
-> Login Successful
-6c6,8
-< ERROR: item name cannot exceed 25 characters
----
-> ERROR:  item name cannot exceed 25 characters
-> Enter minimum bid:
-> Enter auction duration:
-8c10
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST advertiseTests/advertiseDurationCap:
-4c4
-< Login successful
----
-> Login Successful
-10c10
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST advertiseTests/advertiseNotLoggedIn:
-2c2
-< ERROR: User is not logged in
-\ No newline at end of file
----
-> ERROR: User is not logged in
-
-
 TEST advertiseTests/advertiseSuccessful:
-4c4
-< Login successful
----
-> Login Successful
-
-
 TEST bidTests/bidGreaterThanCurrent:
-4c4
-< Login successful
----
-> Login Successful
-7,8c7,8
-< Current bid: 1.00
-< ERROR: new bid must be greater than highest current bid
----
-> ERROR: Auction not found
-> ERROR: Not a command
-10c10
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST bidTests/bidItemDoesNotExist:
-4c4
-< Login successful
----
-> Login Successful
-7c7,8
-< ERROR: Item does not exist
----
-> ERROR: Auction not found
-> ERROR: Not a command
-9c10
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST bidTests/bidMinAmountIncrease:
-4c4
-< Login successful
----
-> Login Successful
-7,8c7,8
-< Current bid: 1.50
-< ERROR: new bid must be at least 5% greater than the current highest bid for standard-buy accounts
----
-> ERROR: Auction not found
-> ERROR: Not a command
-11d10
-< 
-
-
 TEST bidTests/bidNotLoggedIn:
-2c2
-< ERROR: User is not logged in
-\ No newline at end of file
----
-> ERROR: User is not logged in
-
-
 TEST bidTests/bidSellAccount:
-4c4
-< Login successful
----
-> Login Successful
-7c7
-< Transactions Listed
-\ No newline at end of file
----
-> Transactions Listed
-
-
 TEST bidTests/bidSellerDoesNotExist:
-4c4
-< Login successful
----
-> Login Successful
-7c7
-< ERROR: Seller does not exist
----
-> ERROR: Auction not found
-
-
 TEST bidTests/bidSuccessful:
-1a2,4
-> Enter username:
-> Enter password:
-> Login Successful
-4,7c7,9
-< Current bid: 350.00
-< Bid placed
-< Logout Successful
-< Transactions Listed
----
-> ERROR: Auction not found
-> ERROR: Not a command
-> ERROR: Not a command
-
-
 TEST createTests/createAccountType:
-4c4
-< Login successful
----
-> Login Successful
-8c8,9
-< ERROR: Account type must be admin, buy-standard, or sell-standard
----
-> Enter credit for new user:
-> ERROR: Credit must be between 0 and 999,999
-
-
 TEST createTests/createCreditLimit:
-4c4
-< Login successful
----
-> Login Successful
-9,10c9
-< ERROR: Credit must be between 0 and 999,999
-< Logout Successful
----
-> ERROR: Username already takenLogout Successful
-
-
 TEST createTests/createNotAdmin:
-4c4
-< Login successful
----
-> Login Successful
-
-
+TEST createTests/createNotLoggedIn:
 TEST createTests/createSuccess:
-4c4
-< Login successful
----
-> Login Successful
-8c8,9
-< Account creation successful
----
-> Enter credit for new user:
-> ERROR: Credit must be between 0 and 999,999
-
-
 TEST createTests/createUniqueUsername:
-4c4
-< Login successful
----
-> Login Successful
-6c6,9
-< ERROR: That username already exists
----
-> Enter password for new user:
-> Enter account type for new user:
-> Enter credit for new user:
-> ERROR: Credit must be between 0 and 999,999
-
-
 TEST createTests/createUsernameLength:
-4c4
-< Login successful
----
-> Login Successful
-5a6,8
-> Enter password for new user:
-> Enter account type for new user:
-> Enter credit for new user:
-
-
 TEST deleteTests/deleteNotAdmin:
-4c4
-< Login successful
----
-> Login Successful
-
-
 TEST deleteTests/deleteNotCurrent:
-4c4
-< Login successful
----
-> Login Successful
-
-
+TEST deleteTests/deleteNotLoggedIn:
 TEST deleteTests/deleteSuccess:
-2,8d1
-< Enter username:
-< Enter password:
-< Login successful
-< Enter user to be deleted:
-< User deleted
-< Logout Successful
-< Transactions Listed
-
-
 TEST deleteTests/deleteUserExists:
-4c4
-< Login successful
----
-> Login Successful
-6d5
-< ERROR: That user does not exist
-
-
-TEST loginTests/loginNoItemsFile:
-5d4
-< ERROR: Cannot find items
-
-
-TEST logoutTests/logoutListTransaction:
-4c4
-< Login Successful:
----
-> Login Successful
-6c6
-< ERROR: Cannot list transactions
----
-> Transactions Listed
-
-
+TEST loginTests/loginMismatch:
+TEST loginTests/loginMultipleLogin:
+TEST loginTests/loginSuccess:
+TEST logoutTests/logoutNotLoggedIn:
+TEST logoutTests/logoutSuccess:
 TEST refundTests/refundBuyerCreditLimit:
-4c4
-< Login successful
----
-> Login Successful
-8c8
-< ERROR: Buyer will exceed maximum credit
----
-> ERROR: Seller and Buyer are not current users
-
-
 TEST refundTests/refundBuyerExists:
-4c4
-< Login successful
----
-> Login Successful
-6c6,8
-< ERROR: Customer is not a current user
----
-> Enter seller:
-> Enter Amount of Credit:
-> ERROR: Seller and Buyer are not current users
-
-
 TEST refundTests/refundNotAdmin:
-3a4
-> Login Successful
-
-
+TEST refundTests/refundNotLoggedIn:
 TEST refundTests/refundSellerCreditLimit:
-4c4
-< Login successful
----
-> Login Successful
-8c8
-< ERROR: Seller does not have enough credit
----
-> ERROR: Seller and Buyer are not current users
-
-
 TEST refundTests/refundSellerExists:
-4c4
-< Login successful
----
-> Login Successful
-7c7,8
-< ERROR: Seller is not a current user
----
-> Enter Amount of Credit:
-> ERROR: Seller and Buyer are not current users
-
-
 TEST refundTests/refundSuccess:
-4c4
-< Login successful
----
-> Login Successful
-8c8
-< Refund Successful
----
-> ERROR: Seller and Buyer are not current users
-
-
+TEST addcreditTests/addcreditAddLessThanMin:
+TEST addcreditTests/addcreditAddMoreThanMax:
+TEST addcreditTests/addcreditNotLoggedIn:
+TEST addcreditTests/addcreditSuccess:
+TEST addcreditTests/addcreditUserExists:
+TEST advertiseTests/advertiseAdLimit:
+TEST advertiseTests/advertiseBidCap:
+TEST advertiseTests/advertiseBuyAccount:
+TEST advertiseTests/advertiseCharLimit:
+TEST advertiseTests/advertiseDurationCap:
+TEST advertiseTests/advertiseNotLoggedIn:
+TEST advertiseTests/advertiseSuccessful:
+TEST bidTests/bidGreaterThanCurrent:
+TEST bidTests/bidItemDoesNotExist:
+TEST bidTests/bidMinAmountIncrease:
+TEST bidTests/bidNotLoggedIn:
+TEST bidTests/bidSellAccount:
+TEST bidTests/bidSellerDoesNotExist:
+TEST bidTests/bidSuccessful:
+TEST createTests/createAccountType:
+TEST createTests/createCreditLimit:
+TEST createTests/createNotAdmin:
+TEST createTests/createNotLoggedIn:
+TEST createTests/createSuccess:
+TEST createTests/createUniqueUsername:
+TEST createTests/createUsernameLength:
+TEST deleteTests/deleteNotAdmin:
+TEST deleteTests/deleteNotCurrent:
+TEST deleteTests/deleteNotLoggedIn:
+TEST deleteTests/deleteSuccess:
+TEST deleteTests/deleteUserExists:
+TEST loginTests/loginMismatch:
+TEST loginTests/loginMultipleLogin:
+TEST loginTests/loginSuccess:
+TEST logoutTests/logoutNotLoggedIn:
+TEST logoutTests/logoutSuccess:
+TEST refundTests/refundBuyerCreditLimit:
+TEST refundTests/refundBuyerExists:
+TEST refundTests/refundNotAdmin:
+TEST refundTests/refundNotLoggedIn:
+TEST refundTests/refundSellerCreditLimit:
+TEST refundTests/refundSellerExists:
+TEST refundTests/refundSuccess:

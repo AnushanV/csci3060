@@ -3,6 +3,8 @@ Enter username:
 Enter password:
 Login successful
 Enter buyer:
-ERROR: Customer is not a current user
+Enter seller:
+Enter Amount of Credit:
+ERROR: Buyer is not a current user
 Logout Successful
 Transactions Listed
